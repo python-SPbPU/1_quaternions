@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import math
+from doctest import testmod
 
 
 class Quaternion:
@@ -14,6 +15,11 @@ class Quaternion:
         :param b: coefficient b
         :param c: coefficient c
         :param d: coefficient d
+
+        Example:
+        >>> q = Quaternion(1, 2, 3, 4)
+        >>> q
+        Quaternion(1, 2, 3, 4)
         """
         self.a = a
         self.b = b
@@ -26,6 +32,12 @@ class Quaternion:
 
         :param other: Quaternion - second summand
         :return: result of adding self to other
+
+        Example:
+        >>> q1 = Quaternion(1, 2, 3, 4)
+        >>> q2 = Quaternion(5, 6, 7, 8)
+        >>> q1 + q2
+        Quaternion(6, 8, 10, 12)
         """
         return Quaternion(
             self.a + other.a,
@@ -40,6 +52,12 @@ class Quaternion:
 
         :param other: Quaternion - subtrahend
         :return: result of subtraction other from self
+
+        Example:
+        >>> q1 = Quaternion(1, 2, 3, 4)
+        >>> q2 = Quaternion(5, 6, 7, 8)
+        >>> q1 - q2
+        Quaternion(-4, -4, -4, -4)
         """
         return Quaternion(
             self.a - other.a,
@@ -54,6 +72,12 @@ class Quaternion:
 
         :param other: Quaternion - second multiplier
         :return: result of multiplication self and other
+
+        Example:
+        >>> q1 = Quaternion(1, 2, 3, 4)
+        >>> q2 = Quaternion(5, 6, 7, 8)
+        >>> q1 * q2
+        Quaternion(-60, 12, 30, 24)
         """
         return Quaternion(
             self.a * other.a - self.b * other.b - self.c * other.c - self.d * other.d,
@@ -72,9 +96,9 @@ class Quaternion:
         :return: norm of Quanternion - its "length"
 
         Example:
-            >>> q = Quaternion(1, 1, 1, 1)
-            >>> q.norm()
-            2.0
+        >>> q = Quaternion(1, 1, 1, 1)
+        >>> q.norm()
+        2.0
         """
         return math.sqrt(self.a ** 2 + self.b ** 2 + self.c ** 2 + self.d ** 2)
 
@@ -83,6 +107,11 @@ class Quaternion:
         Reverse the Quaternion
 
         :return: inverse copy of Quaternion
+
+        Example:
+        >>> q = Quaternion(4, 4, 4, 4)
+        >>> q.inverse()
+        Quaternion(0.0625, -0.0625, -0.0625, -0.0625)
         """
         norm_sq = self.norm() ** 2
         return Quaternion(
@@ -98,6 +127,11 @@ class Quaternion:
         Division is multiplication of self and inverse other
         :param other: Quaternion - divider
         :return: result of dividing self by other
+        Example:
+        >>> q1 = Quaternion(4, 4, 4, 4)
+        >>> q2 = Quaternion(2, 2, 2, 2)
+        >>> q1 / q2
+        Quaternion(2.0, 0.0, 0.0, 0.0)
         """
         return self * other.inverse()
 
@@ -107,9 +141,9 @@ class Quaternion:
         :return: new normalized Quaternion
 
         Example:
-            >>> q = Quaternion(1, 2, 3, 4)
-            >>> q.normalize()
-            Quaternion(0.18257418583505536, 0.3651483716701107, 0.5477225575051661, 0.7302967433402214)
+        >>> q = Quaternion(1, 1, 1, 1)
+        >>> q.normalize()
+        Quaternion(0.5, 0.5, 0.5, 0.5)
         """
         n = self.norm()
         return Quaternion(self.a / n, self.b / n, self.c / n, self.d / n)
@@ -118,6 +152,11 @@ class Quaternion:
         """
         Calculate conjugate of the Quaternion
         :return: new conjugate Quaternion
+
+        Example:
+        >>> q = Quaternion(1, 2, 3, 4)
+        >>> q.conjugate()
+        Quaternion(1, -2, -3, -4)
         """
         return Quaternion(self.a, -self.b, -self.c, -self.d)
 
@@ -127,9 +166,9 @@ class Quaternion:
         :return: vector with coefficients b, c, d
 
         Example:
-            >>> q = Quaternion(1, 2, 3, 4)
-            >>> q.vector()
-            (2, 3, 4)
+        >>> q = Quaternion(1, 2, 3, 4)
+        >>> q.vector()
+        (2, 3, 4)
         """
         return self.b, self.c, self.d
 
@@ -142,10 +181,10 @@ class Quaternion:
         :return: rotated vector
 
         Example:
-            >>> q = Quaternion(1, 2, 3, 4)
-            >>> v = (1, 1, 1)
-            >>> q.rotate_vector(v)
-            (0.19999999999999996, 1.0, 1.4)
+        >>> q = Quaternion(1, 2, 3, 4)
+        >>> v = (1, 1, 1)
+        >>> q.rotate_vector(v)
+        (0.19999999999999996, 1.0, 1.4)
         """
         q_vector = Quaternion(0, *vector)
         return (self * q_vector * self.inverse()).vector()
@@ -192,3 +231,7 @@ class Quaternion:
         :return: string representation of Quaternion
         """
         return f"Quaternion({self.a}, {self.b}, {self.c}, {self.d})"
+
+
+if __name__ == "__main__":
+    testmod(name="quternion", verbose=True)
